@@ -1,73 +1,37 @@
 import {
-  Approval as ApprovalEvent,
-  ApprovalForAll as ApprovalForAllEvent,
-  OwnershipTransferred as OwnershipTransferredEvent,
-  Transfer as TransferEvent
+  Transfer as TransferEvent,
+  BAYC,
 } from "../generated/BAYC/BAYC"
 import {
-  Approval,
-  ApprovalForAll,
-  OwnershipTransferred,
+  BoredApe,
   Transfer
 } from "../generated/schema"
 
-export function handleApproval(event: ApprovalEvent): void {
-  let entity = new Approval(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.owner = event.params.owner
-  entity.approved = event.params.approved
-  entity.tokenId = event.params.tokenId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-  let entity = new ApprovalForAll(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.owner = event.params.owner
-  entity.operator = event.params.operator
-  entity.approved = event.params.approved
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleOwnershipTransferred(
-  event: OwnershipTransferredEvent
-): void {
-  let entity = new OwnershipTransferred(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.previousOwner = event.params.previousOwner
-  entity.newOwner = event.params.newOwner
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
 export function handleTransfer(event: TransferEvent): void {
-  let entity = new Transfer(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.from = event.params.from
-  entity.to = event.params.to
-  entity.tokenId = event.params.tokenId
+  
+//Here we write the handler code for the Transfer entity
+  let transfer = new Transfer(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  transfer.from = event.params.from
+  transfer.to = event.params.to
+  transfer.tokenId = event.params.tokenId
+  transfer.blockNumber = event.block.number
+  transfer.transactionHash = event.transaction.hash
+  transfer.save()
+//The transfer entity handler code ends here
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
 
-  entity.save()
+//Here we write the handler code for the BoredApe entity
+  let boredApe = BoredApe.load(event.params.tokenId.toString());
+  let contractAddress = BAYC.bind(event.address);
+
+  if(!boredApe){
+  boredApe = new BoredApe(event.params.tokenId.toString());
+  boredApe.creator=event.params.to;
+  boredApe.tokenURI=contractAddress.tokenURI(event.params.tokenId);
+  }
+  boredApe.newOwner=event.params.to;
+  boredApe.blockNumber=event.block.number;
+  boredApe.save();
+//The BoredApe entity handler code ends here
+
 }
