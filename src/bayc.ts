@@ -41,19 +41,19 @@ export function handleTransfer(event: TransferEvent): void {
   let tokenURI = "/" + event.params.tokenId.toString();
   log.debug('The tokenURI is: {} ', [tokenURI]);
 
-  let property = Property.load(event.params.tokenId.toString());
+  let metadata = Property.load(event.params.tokenId.toString());
 
-  if (property==null) {
-    property = new Property(event.params.tokenId.toString());
+  if (metadata == null) {
+    metadata = new Property(event.params.tokenId.toString());
 
-    let fullURI  =  ipfshash + tokenURI;
+    let fullURI = ipfshash + tokenURI;
     log.debug('The fullURI is: {} ', [fullURI]);
 
-    let ipfsData = ipfs.cat(fullURI);
+    let ipfsData = ipfs.cat(ipfshash + tokenURI);
 
     if (ipfsData) {
       let ipfsValues = json.fromBytes(ipfsData);
-      let ipfsValuesObject= ipfsValues.toObject();
+      let ipfsValuesObject = ipfsValues.toObject();
 
       if (ipfsValuesObject) {
         let image = ipfsValuesObject.get('image');
@@ -61,11 +61,11 @@ export function handleTransfer(event: TransferEvent): void {
 
         let attributeArray: JSONValue[];
         if (image) {
-          property.image = image.toString();
+          metadata.image = image.toString();
         }
         if (attributes) {
 
-        attributeArray = attributes.toArray();
+          attributeArray = attributes.toArray();
 
           for (let i = 0; i < attributeArray.length; i++) {
 
@@ -85,31 +85,31 @@ export function handleTransfer(event: TransferEvent): void {
               if (trait && value) {
 
                 if (trait == "Background") {
-                  property.background = value;
+                  metadata.background = value;
                 }
 
                 if (trait == "Clothes") {
-                  property.clothes = value;
+                  metadata.clothes = value;
                 }
 
                 if (trait == "Earring") {
-                  property.earring = value;
+                  metadata.earring = value;
                 }
 
                 if (trait == "Eyes") {
-                  property.eyes = value;
+                  metadata.eyes = value;
                 }
 
                 if (trait == "Fur") {
-                  property.fur = value;
+                  metadata.fur = value;
                 }
 
                 if (trait == "Hat") {
-                  property.hat = value;
+                  metadata.hat = value;
                 }
 
                 if (trait == "Mouth") {
-                  property.mouth = value;
+                  metadata.mouth = value;
                 }
 
               }
@@ -122,8 +122,16 @@ export function handleTransfer(event: TransferEvent): void {
 
       }
     }
+    
+
+
+
 
   }
+
+  metadata.save();
+ 
+
 
 
 

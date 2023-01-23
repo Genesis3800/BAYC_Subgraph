@@ -17,12 +17,12 @@ type BoredApe @entity {
 
 type Property @entity {
   id: ID!
-  image: String!
-  background: String!
-  clothes: String!
-  earring: String!
-  eyes: String!
-  fur: String!
-  hat: String!
-  mouth: String!
+  image: String
+  background: String
+  clothes: String
+  earring: String
+  eyes: String
+  fur: String
+  hat: String
+  mouth: String
 }
