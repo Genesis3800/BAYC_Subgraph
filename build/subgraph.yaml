@@ -1,4 +1,7 @@
 specVersion: 0.0.5
+description: A subgraph to index data on the Bored Apes contract
+features:
+  - ipfsOnEthereumContracts
 schema:
   file: schema.graphql
 dataSources:
@@ -16,6 +19,7 @@ dataSources:
       entities:
         - Transfer
         - BoredApe
+        - Metadata
       abis:
         - name: BAYC
           file: BAYC/abis/BAYC.json

@@ -14,3 +14,15 @@ type BoredApe @entity {
   tokenURI: String!
   blockNumber: BigInt!
 }
+
+type Property @entity {
+  id: ID!
+  image: String!
+  background: String!
+  clothes: String!
+  earring: String!
+  eyes: String!
+  fur: String!
+  hat: String!
+  mouth: String!
+}

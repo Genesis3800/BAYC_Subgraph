@@ -155,3 +155,107 @@ export class BoredApe extends Entity {
     this.set("blockNumber", Value.fromBigInt(value));
   }
 }
+
+export class Property extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Property entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Property must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Property", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Property | null {
+    return changetype<Property | null>(store.get("Property", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get image(): string {
+    let value = this.get("image");
+    return value!.toString();
+  }
+
+  set image(value: string) {
+    this.set("image", Value.fromString(value));
+  }
+
+  get background(): string {
+    let value = this.get("background");
+    return value!.toString();
+  }
+
+  set background(value: string) {
+    this.set("background", Value.fromString(value));
+  }
+
+  get clothes(): string {
+    let value = this.get("clothes");
+    return value!.toString();
+  }
+
+  set clothes(value: string) {
+    this.set("clothes", Value.fromString(value));
+  }
+
+  get earring(): string {
+    let value = this.get("earring");
+    return value!.toString();
+  }
+
+  set earring(value: string) {
+    this.set("earring", Value.fromString(value));
+  }
+
+  get eyes(): string {
+    let value = this.get("eyes");
+    return value!.toString();
+  }
+
+  set eyes(value: string) {
+    this.set("eyes", Value.fromString(value));
+  }
+
+  get fur(): string {
+    let value = this.get("fur");
+    return value!.toString();
+  }
+
+  set fur(value: string) {
+    this.set("fur", Value.fromString(value));
+  }
+
+  get hat(): string {
+    let value = this.get("hat");
+    return value!.toString();
+  }
+
+  set hat(value: string) {
+    this.set("hat", Value.fromString(value));
+  }
+
+  get mouth(): string {
+    let value = this.get("mouth");
+    return value!.toString();
+  }
+
+  set mouth(value: string) {
+    this.set("mouth", Value.fromString(value));
+  }
+}
