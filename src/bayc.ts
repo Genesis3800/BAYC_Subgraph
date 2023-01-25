@@ -37,31 +37,32 @@ export function handleTransfer(event: TransferEvent): void {
   boredApe.save();
   //The BoredApe entity handler code ends here
 
+
+  //Here we write the handler code for the metadata
+
   const ipfshash = "QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq"
   let tokenURI = "/" + event.params.tokenId.toString();
-  log.debug('The tokenURI is: {} ', [tokenURI]);
 
-  let metadata = Property.load(event.params.tokenId.toString());
+  let property = Property.load(event.params.tokenId.toString());
 
-  if (metadata == null) {
-    metadata = new Property(event.params.tokenId.toString());
+  if (property == null) {
+    property = new Property(event.params.tokenId.toString());
 
     let fullURI = ipfshash + tokenURI;
     log.debug('The fullURI is: {} ', [fullURI]);
 
-    let ipfsData = ipfs.cat(ipfshash + tokenURI);
+    let ipfsData = ipfs.cat(fullURI);
 
     if (ipfsData) {
-      let ipfsValues = json.fromBytes(ipfsData);
-      let ipfsValuesObject = ipfsValues.toObject();
+      let ipfsValues = json.fromBytes(ipfsData).toObject();
 
-      if (ipfsValuesObject) {
-        let image = ipfsValuesObject.get('image');
-        let attributes = ipfsValuesObject.get('attributes');
+      if (ipfsValues) {
+        let image = ipfsValues.get('image');
+        let attributes = ipfsValues.get('attributes');
 
         let attributeArray: JSONValue[];
         if (image) {
-          metadata.image = image.toString();
+          property.image = image.toString();
         }
         if (attributes) {
 
@@ -85,31 +86,31 @@ export function handleTransfer(event: TransferEvent): void {
               if (trait && value) {
 
                 if (trait == "Background") {
-                  metadata.background = value;
+                  property.background = value;
                 }
 
                 if (trait == "Clothes") {
-                  metadata.clothes = value;
+                  property.clothes = value;
                 }
 
                 if (trait == "Earring") {
-                  metadata.earring = value;
+                  property.earring = value;
                 }
 
                 if (trait == "Eyes") {
-                  metadata.eyes = value;
+                  property.eyes = value;
                 }
 
                 if (trait == "Fur") {
-                  metadata.fur = value;
+                  property.fur = value;
                 }
 
                 if (trait == "Hat") {
-                  metadata.hat = value;
+                  property.hat = value;
                 }
 
                 if (trait == "Mouth") {
-                  metadata.mouth = value;
+                  property.mouth = value;
                 }
 
               }
@@ -122,17 +123,11 @@ export function handleTransfer(event: TransferEvent): void {
 
       }
     }
-    
-
-
-
 
   }
 
-  metadata.save();
- 
+  property.save();
 
-
-
+  //The Metadata entity handler code ends here
 
 }

@@ -19,7 +19,7 @@ dataSources:
       entities:
         - Transfer
         - BoredApe
-        - Metadata
+        - Property
       abis:
         - name: BAYC
           file: ./abis/BAYC.json
